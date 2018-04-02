@@ -72,3 +72,36 @@ then
 : string-empty? ( str - 0 1 ) 
     c@ 0 = ; 
 
+( addr1 addr2 -- addr3 )
+: concat
+  swap
+  over ( addr1 addr2 addr1 )
+  over ( addr1 addr2 addr1 addr2 )
+  
+  count ( addr1 addr2 addr1 size2 )
+  swap ( addr1 addr2 size2 addr1 )
+  count ( addr1 addr2 size2 size1 )
+  dup ( addr1 addr2 size2 size1 size1 )
+  rot ( addr1 addr2 size1 size2 size1 )
+  1
+  -
+  +
+  heap-alloc ( addr1 addr2 size1 addr3 )
+  dup ( addr1 addr2 size1 addr3 addr3 )
+  
+  rot ( addr1 addr2 addr3 addr3 size1 )
+  + ( addr1 addr2 addr3 addr3_shift )
+  
+  rot ( addr1 addr3 addr3_shift addr2 )
+  rot ( addr1 addr3_shift addr2 addr3 )
+  
+  dup ( addr1 addr3_shift addr2 addr3 addr3 )
+  rot ( addr1 addr3_shift addr3 addr3 addr2 )
+  
+  string-copy ( addr1 addr3_shift addr3 )
+  
+  swap ( addr1 addr3 addr3_shift )
+  rot ( addr3 addr3_shift addr1 )
+  
+  string-copy
+;
